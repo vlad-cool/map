@@ -1,0 +1,14 @@
+{
+    "name": "Russia_borders",
+    "points": "Russia_borders_1.map",
+    "data": {
+        "value": 10
+    },
+    "palette": {
+        "default_color": {
+            "name": "green"
+        },
+        "type": "country",
+        "name": "country_default"
+    }
+}

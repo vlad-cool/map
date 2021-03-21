@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=C:\Users\Eva\Documents\Влад\Sites\MAP\venv"
+set "VIRTUAL_ENV=C:\Users\vlad-\Documents\VSCode\MAP\venv"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"

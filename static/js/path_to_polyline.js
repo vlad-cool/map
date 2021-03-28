@@ -14,6 +14,7 @@ input.addEventListener('input', () => {
 
         reader.onload = function() {
             document.getElementById("input_view").outerHTML = reader.result;
+            document.getElementsByTagName("svg")[0].setAttribute("id", "input_view");
             pol_from_path(reader.result)
         };
         
@@ -25,7 +26,7 @@ input.addEventListener('input', () => {
 
 function pol_from_path(path)
 {
-    var samples = 100;
+    var samp_len = 10;
 
     if (window.DOMParser)
     {
@@ -33,25 +34,32 @@ function pol_from_path(path)
         input_svg = parser.parseFromString(path, "text/xml");
     }
     
-    var paths = input_svg.getElementsByTagName("path")
+    var paths = input_svg.getElementsByTagName("path");
     var pol = "";
     var pols = [];
+    var html_paths = document.getElementById("input_view").getElementsByTagName("path");
 
-
-    console.log(paths.length)
-    for (var i = 0; i < 1; i++)
+    for (var i = 0; i < paths.length; i++)
     {
         var d = paths[i].getAttribute("d");
         var command;
         var cx = 0, cy = 0;
+        var curve = ""
 
-        var i = 0;
+        console.log(d);
 
-        while (i < 1)
+        while (d.length > 0)
         {
             command = d[0];
             d = d.substr(1);
 
+
+            if ("mMlMvVhHzZ".indexOf(command) != -1)
+            {
+                pol += StringToPol(curve);
+                curve = "";
+                continue;
+            }
             switch (command)
             {
                 case 'm':
@@ -62,7 +70,12 @@ function pol_from_path(path)
                     }
 
                     cx += parseFloat(d);
+                    d = removeFloat(d);
+                    d = d.trim();
+
                     cy += parseFloat(d);
+                    d = removeFloat(d);
+                    d = d.trim();
 
                     break;
                 case 'M':
@@ -73,7 +86,12 @@ function pol_from_path(path)
                     }
 
                     cx = parseFloat(d);
+                    d = removeFloat(d);
+                    d = d.trim();
+
                     cy = parseFloat(d);
+                    d = removeFloat(d);
+                    d = d.trim();
 
                     break;
                 case 'l':
@@ -104,7 +122,7 @@ function pol_from_path(path)
                     d = d.trim();
         
                     break;
-                case 'V ':
+                case 'V':
                     pol += " " + cx;
                     
                     pol += "," + (cy += parseFloat(d));
@@ -129,85 +147,30 @@ function pol_from_path(path)
         
                     break;
                 case 'Z':
-                    pol.trim();
-                    pol += pol.split(' ')[0];
-                    break;
                 case 'z':
                     pol.trim();
                     pol += pol.split(' ')[0];
                     break;
-                case 'c':
-                    var dtemp = 'M' + cx + ' ' + cy + ' c ';
-
-                    dtemp += (cx += parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cy += parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cx += parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cy += parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cx += parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cy += parseFloat(d));
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    pathtemp = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                    pathtemp.setAttribute("d", dtemp);
-
-                    pol += TempPathToPol(pathtemp, samples)
-
-                    break;
-                case 'C':
-                    var dtemp = 'M' + cx + ' ' + cy + ' c ';
-
-                    dtemp += (cx = parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cy = parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cx = parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cy = parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cx = parseFloat(d)) + ' ';
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    dtemp += (cy = parseFloat(d));
-                    d = removeFloat(d);
-                    d = d.trim();
-
-                    pathtemp = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                    pathtemp.setAttribute("d", dtemp);
-
-                    pol += TempPathToPol(pathtemp, samples)
-
-                    break;
                 default:
-                    console.log(command);
+                    curve += command;
                     break;
             }
-            i++;
         }
+
+        pol += StringToPol('M' + cx + ' ' + cy + ' c ' + curve);
+        curve = "";
+
+        pol = pol.replace(/(undefined)/gi, '');
+        console.log(pol);
+        //paths[i].removeAttribute("d");
+        //paths[i].setAttribute("points", pol);
+        //paths[i].renameNode("path", paths[i].getNamespaceURI, "polyline");
+
+        //document.getElementById("input_view") = s
+        html_paths[i].removeAttribute(d);
+        html_paths[i].setAttribute("points", pol);
+        html_paths[i].outerHTML = html_paths[i].outerHTML.replaceAll("path", "polyline");
+        //document.renameNode("path", null, "polyline"); 
     }
 
     function removeFloat (s)
@@ -219,15 +182,31 @@ function pol_from_path(path)
         return s;
     }
 
-    function TempPathToPol(path, samples)
+    function TempPathToPol(path)
     {
-        var samp_len = path.getTotalLength / samples, ans, point;
-
-        for (var i = 1; i < samples; i++)
+        //var samp_len = path.getTotalLength() / samples, 
+        var ans, point, len = path.getTotalLength();
+        console.log(len);
+        for (var i = 1; i * samp_len < len; i++)
         {
             point = path.getPointAtLength(samp_len * i);
             ans += ' ' + point.x + ',' + point.y;
         }
         return ans;
+    }
+
+    function StringToPol (s)
+    {
+        s.trim();
+        if (s.length == 0)
+        {
+            return "";
+        }
+
+        s = 'M' + cx + ' ' + cy + ' ' + s;
+
+        pathtemp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        pathtemp.setAttribute("d", s);
+        return TempPathToPol(pathtemp);
     }
 }

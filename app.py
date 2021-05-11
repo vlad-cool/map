@@ -1,6 +1,6 @@
 import os
 import shp
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request
 
 app = Flask(__name__)
 
@@ -14,9 +14,9 @@ def index():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static', 'favicons'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@app.route('get_map')
+@app.route('/get_map', methods=['POST'])
 def get_map():
-    
+    return shp.map(request.form["attrs"])
 
 if __name__ == "__main__":
     app.run()

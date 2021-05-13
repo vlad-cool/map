@@ -1,16 +1,27 @@
 {
-    "inner_water": {
-        "width" : "1px",
-        "color" : "3e65c9",
+    "countries": {
+        "width" : "0.1%",
+        "color1" : "random",
+        "color2" : "random",
+        "name" : 17,
+        "chosen" : [
+            "all"
+        ]
+    },
+    "rivers": {
+        "width" : "0.02%",
+        "color1" : "#97d0fc",
+        "color2" : "#77b0dc",
         "name" : 2,
         "chosen" : [
             "all"
         ]
     },
-    "countries": {
-        "width" : "4px",
-        "color" : "random",
-        "name" : 17,
+    "lakes": {
+        "width" : "0.05%",
+        "color1" : "#97d0fc",
+        "color2" : "#77b0dc",
+        "name" : 2,
         "chosen" : [
             "all"
         ]

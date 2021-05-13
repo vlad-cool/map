@@ -7,7 +7,10 @@ import simplejson
 
 from turtle import Screen, Turtle
 
-r = 256
+r = 200
+
+def d2r(a):
+    return a * math.pi / 180
 
 def get_color(s):
     s = str(s)
@@ -16,7 +19,7 @@ def get_color(s):
     for i in s:
         a += ord(i)
 
-    b = a ** 4
+    b = a ** 5
     
     ans1 = "rgb("
     ans2 = "rgb("
@@ -37,8 +40,8 @@ def get_color(s):
     return ans1, ans2
 
 def proj(point):
-    x = point[0] * r * 2 / 180 + r * 2.25
-    y = -math.sinh(point[1] * math.pi / 180) * r + r * 2.25
+    x = point[0] * math.sinh(d2r(10)) * 10 * r * 1.5 / 180 + r * 2.5
+    y = -math.sinh(d2r(point[1])) * r * 1.5 + r * 3.5
 
     return x, y
 
@@ -52,17 +55,19 @@ def map(attrs):
 
         shapeRecords = sf.shapeRecords()
 
-        while len(shapeRecords) > 0:
-            shapeRecord = shapeRecords[0]
+        for shapeRecord in shapeRecords:
             record = shapeRecord.record
             shape = shapeRecord.shape
-            shapeRecords = shapeRecords[1::]
 
-            if record[17] not in countries and countries[0] != "all":
+            ########
+            ####print(shape.shapeTypeName)
+            ########
+
+            if record[attrs[attr]["name"]] not in countries and countries[0] != "all":
                 continue
 
-            if attrs[attr]["color"] != "random":
-                color2, color1 = attrs[attr]["color"], attrs[attr]["color"]
+            if attrs[attr]["color1"] != "random":
+                color2, color1 = attrs[attr]["color1"], attrs[attr]["color2"]
             else:
                 color2, color1 = get_color(record[attrs[attr]["name"]])
             parts = shape.parts
@@ -73,7 +78,10 @@ def map(attrs):
                 if len(parts) > 0 and i == parts[0]:
                     if parts[0] != 0:
                         res += '" />\n'
-                    res += '<polygon stroke="' + color1 + '" fill="' + color2 + '" id="' + attr + record[attrs[attr]["name"]] + str(counter) + '" stroke-width="' + attrs[attr]["width"] +'" stroke-linejoin="round" points="'
+                    if shape.shapeType == 5:
+                        res += '<polygon stroke="' + str(color1) + '" fill="' + str(color2) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) +'" stroke-linejoin="round" points="'
+                    if shape.shapeType == 3:
+                        res += '<polyline stroke="' + str(color1) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) +'" fill="none" stroke-linejoin="round" points="'
                     parts = parts[1::]
                     counter += 1
 
@@ -85,5 +93,5 @@ def map(attrs):
         print(attr)
     return res
 
-sf = shapefile.Reader("resources/shape/" + "inner_water" + "/" + "inner_water")
-print(vars(sf.records()[0]))
+#sf = shapefile.Reader("resources/shape/" + "inner_water" + "/" + "inner_water")
+#print(vars(sf.records()[0]))

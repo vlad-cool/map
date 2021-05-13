@@ -19,4 +19,4 @@ def get_map():
     return shp.map(request.form["attrs"])
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port="5000")

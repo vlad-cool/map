@@ -1,7 +1,18 @@
-    {
-        "countries": [
-            "Russia",
-            "Canada",
-            "United States of America"
+{
+    "inner_water": {
+        "width" : "1px",
+        "color" : "3e65c9",
+        "name" : 2,
+        "chosen" : [
+            "all"
+        ]
+    },
+    "countries": {
+        "width" : "4px",
+        "color" : "random",
+        "name" : 17,
+        "chosen" : [
+            "all"
         ]
     }
+}

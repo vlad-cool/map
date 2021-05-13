@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+
+    <script src="https://unpkg.com/svg-pan-zoom-container"></script>
 </head>
 <body>
     <div style="display: grid; grid-template-columns: 3fr 1fr;">
-        <div>
-            <svg id="main_map" width="512" height="1024" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div {# data-zoom-on-wheel data-pan-on-drag#} >
+            <svg id="main_map" width="100%" height="2048" xmlns="http://www.w3.org/2000/svg" style="background-color: rgb(206, 236, 234);"></svg>
         </div>
         <div>
             <input id="attributes" type="text">
@@ -63,7 +65,7 @@
             method: 'POST',
 
             success: function(data) {
-                map.innerHTML = data;
+                map.innerHTML += data;
             }
 
             });

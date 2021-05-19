@@ -4,10 +4,12 @@ import random
 import json
 import pickle
 import simplejson
+import time
 
 from turtle import Screen, Turtle
 
 r = 200
+main_counter = 0
 
 def d2r(a):
     return a * math.pi / 180
@@ -40,15 +42,17 @@ def get_color(s):
     return ans1, ans2
 
 def proj(point):
-    x = point[0] * math.sinh(d2r(10)) * 10 * r * 1.5 / 180 + r * 2.5
-    y = -math.sinh(d2r(point[1])) * r * 1.5 + r * 3.5
+    x = point[0] * math.sinh(d2r(10)) * 10 * r * 1.5 / 180 + r * 2.9
+    y = -math.sinh(d2r(point[1])) * r * 1.25 + r * 3.5
 
     return x, y
 
 def map(attrs):
-    res = ""
     attrs = json.loads(attrs)
     print(list(attrs))
+    path = "temp/" + str(main_counter) + "_" + str(time.time()) + ".svg"
+    svg = open(path, 'w', encoding="utf-8")
+    svg.write("<g>")
     for attr in list(attrs):
         sf = shapefile.Reader("resources/shape/" + attr + "/" + attr)
         countries = attrs[attr]["chosen"]
@@ -58,10 +62,6 @@ def map(attrs):
         for shapeRecord in shapeRecords:
             record = shapeRecord.record
             shape = shapeRecord.shape
-
-            ########
-            ####print(shape.shapeTypeName)
-            ########
 
             if record[attrs[attr]["name"]] not in countries and countries[0] != "all":
                 continue
@@ -77,21 +77,22 @@ def map(attrs):
             for i in range(len(shape.points)):
                 if len(parts) > 0 and i == parts[0]:
                     if parts[0] != 0:
-                        res += '" />\n'
+                        svg.write('" />\n')
                     if shape.shapeType == 5:
-                        res += '<polygon stroke="' + str(color1) + '" fill="' + str(color2) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) +'" stroke-linejoin="round" points="'
+                        svg.write('<polygon stroke="' + str(color1) + '" fill="' + str(color2) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) + '" stroke-opacity="' + str(attrs[attr]["opacity"]) + '" stroke-linejoin="round" points="')
                     if shape.shapeType == 3:
-                        res += '<polyline stroke="' + str(color1) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) +'" fill="none" stroke-linejoin="round" points="'
+                        svg.write('<polyline stroke="' + str(color1) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) +'" stroke-opacity="' + str(attrs[attr]["opacity"]) + '" fill="none" stroke-linejoin="round" points="')
                     parts = parts[1::]
                     counter += 1
 
                 point = shape.points[i]
                 x, y = proj(point)
-                res += " " + str(x) + "," + str(y)
-            res += '" />\n'
+                svg.write(" " + str(x) + "," + str(y))
+            svg.write('" />\n')
         sf.close()
         print(attr)
-    return res
 
-#sf = shapefile.Reader("resources/shape/" + "inner_water" + "/" + "inner_water")
-#print(vars(sf.records()[0]))
+    svg.write("</g>")
+    svg.close()
+    print("All done!")
+    return path

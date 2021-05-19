@@ -1,6 +1,7 @@
 {
     "countries": {
         "width" : "0.1%",
+        "opacity" : "0.5",
         "color1" : "random",
         "color2" : "random",
         "name" : 17,
@@ -10,6 +11,7 @@
     },
     "rivers": {
         "width" : "0.02%",
+        "opacity" : "1",
         "color1" : "#97d0fc",
         "color2" : "#77b0dc",
         "name" : 2,
@@ -18,7 +20,8 @@
         ]
     },
     "lakes": {
-        "width" : "0.05%",
+        "width" : "0.02%",
+        "opacity" : "1",
         "color1" : "#97d0fc",
         "color2" : "#77b0dc",
         "name" : 2,

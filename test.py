@@ -12,4 +12,4 @@ print(sf.fields)
 for shapeRecord in shapes:
     for i in sf.fields:
         print(sf.fields, end=" ")
-    print("") 
+    print("")

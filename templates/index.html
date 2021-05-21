@@ -8,7 +8,7 @@
 </head>
 <body>
     <div style="display: grid; grid-template-columns: 3fr 1fr;">
-        <div {# data-zoom-on-wheel data-pan-on-drag#} >
+        <div data-zoom-on-wheel data-pan-on-drag>
             <svg id="main_map" width="100%" height="2048" xmlns="http://www.w3.org/2000/svg" style="background-color: rgb(206, 236, 234);"></svg>
         </div>
         <div>
@@ -16,7 +16,16 @@
             <button onclick="get_map()">
                 get map
             </button>
-            
+
+            <br>
+            <br>
+            <br>
+
+            <button onclick="Kaboom()">Kaboom!!!</button>
+
+            <br>
+            <br>
+            <br>
 
             <hr>
             {#<option value = "111"></option><datalist id="lst">
@@ -25,15 +34,28 @@
             </datalist>
             #}
 
-            {#<input type="checkbox" id="countries"> <a onclick="change_visible('countries')">Страны!11!!!</a>
+
+
+            <input type="checkbox" id="countries"> <a onclick="change_visible('countries')">Страны!11!!!</a>
             <div id="countries_div" style="display: none; margin-left: 5%;">
                 <input type="checkbox" id="countries_north_america"> <a onclick="change_visible('countries_north_america')">Омерика</a>
                 <div id="countries_north_america_div" style="display: none; margin-left: 5%;">
                     <input type="checkbox" id="USA"> <a>Асашай</a> <br>
                     <input type="checkbox" id="Canada"> <a>Конада</a>
                 </div>
+
+                <input type="checkbox" id="countries_north_america"> <a onclick="change_visible('countries_north_america')">Гейропа</a>
+                <div id="countries_north_america_div" style="display: none; margin-left: 5%;">
+                    <input type="checkbox" id="Russia"> <a>Расия</a> <br>
+                    <input type="checkbox" id="England"> <a>Онглия</a>
+                    <input type="checkbox" id="France"> <a>Франция</a>
+                    <input type="checkbox" id="Spain"> <a>Испания</a>
+
+                </div>
             </div>
-            #}
+            
+
+
         </div>
     </div>
 
@@ -77,6 +99,21 @@
             }
 
             });
+        }
+    
+        function Kaboom() {
+            var pols = document.getElementsByTagName("polygon");
+
+            for (var i = 0; i < pols.length; i++)
+            {
+                var pol = pols[i];
+
+                pol.setAttribute("style", "clip-path: polygon(" + pol.getAttribute("points") + ")");
+
+                console.log(pol.getAttribute("points"));
+            }
+
+            console.log("Finish...");
         }
     </script>
 </body>

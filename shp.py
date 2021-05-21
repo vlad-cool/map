@@ -45,6 +45,12 @@ def proj(point):
     x = point[0] * math.sinh(d2r(10)) * 10 * r * 1.5 / 180 + r * 2.9
     y = -math.sinh(d2r(point[1])) * r * 1.25 + r * 3.5
 
+    #x = (d2r(point[0]) * 3 / (2 * math.pi)) * math.sqrt(abs((math.pi ** 2) / 3 - d2r(point[1]) ** 2))
+    #y = d2r(point[1])
+
+    #x *= r
+    #y *= r
+
     return x, y
 
 def map(attrs):
@@ -74,12 +80,14 @@ def map(attrs):
 
             counter = 0
 
+            head = ""
+
             for i in range(len(shape.points)):
                 if len(parts) > 0 and i == parts[0]:
                     if parts[0] != 0:
                         svg.write('" />\n')
                     if shape.shapeType == 5:
-                        svg.write('<polygon stroke="' + str(color1) + '" fill="' + str(color2) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) + '" stroke-opacity="' + str(attrs[attr]["opacity"]) + '" stroke-linejoin="round" points="')
+                        svg.write('<polygon stroke="' + str(color1) + '" fill="' + str(color2) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) + '" stroke-opacity="' + str(attrs[attr]["opacity"]) + '" stroke-linejoin="round" style="clip-path: url("#' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '")' + '" points="')
                     if shape.shapeType == 3:
                         svg.write('<polyline stroke="' + str(color1) + '" id="' + str(attr) + str(record[attrs[attr]["name"]]) + str(counter) + '" stroke-width="' + str(attrs[attr]["width"]) +'" stroke-opacity="' + str(attrs[attr]["opacity"]) + '" fill="none" stroke-linejoin="round" points="')
                     parts = parts[1::]

@@ -64,7 +64,6 @@
         <img src="/static/logo/naturalearthdata.png">
     </a>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
         function change_visible(id)
         {
@@ -86,19 +85,16 @@
             var attrs = document.getElementById("attributes");
             var map = document.getElementById("main_map");
 
-            $.ajax({
-
-            url: '/get_map',
-            data: {'attrs' : attrs.value}, 
-            method: 'POST',
-
-            success: function(data) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/get_map', true);
+            console.log(attrs.value)
+            xhr.send(attrs.value);
+            xhr.onload = function()
+            {
                 console.log("кукареку");
-                console.log(data)
-                map.innerHTML += data;
-            }
-
-            });
+                console.log(xhr.responseText);
+                map.innerHTML += xhr.responseText;
+            };
         }
     
         function Kaboom() {

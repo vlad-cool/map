@@ -16,7 +16,9 @@ def favicon():
 
 @app.route('/get_map', methods=['POST'])
 def get_map():
-    path = shp.map(request.form["attrs"])
+    print(request.data)
+    print(request)
+    path = shp.map(request.data)
     file = open(path, 'r', encoding="utf-8")
     s = file.read()
     file.close()

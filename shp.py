@@ -21,18 +21,18 @@ def get_color(s):
     for i in s:
         a += ord(i)
 
-    b = a ** 5
+    b = a ** 10
     
     ans1 = "rgb("
     ans2 = "rgb("
     ans1 += str(127 + b % 127 - 65)
     ans2 += str(127 + b % 127 - 85)
-    b /= 127
+    b //= 127
     ans1 += ", "
     ans2 += ", "
     ans1 += str(127 + b % 127 - 65)
     ans2 += str(127 + b % 127 - 85)
-    b /= 127
+    b //= 127
     ans1 += ", "
     ans2 += ", "
     ans1 += str(127 + b % 127 - 65)
@@ -43,7 +43,7 @@ def get_color(s):
 
 def proj(point):
     x = point[0] * math.sinh(d2r(10)) * 10 * r * 1.5 / 180 + r * 2.9
-    y = -math.sinh(d2r(point[1])) * r * 1.25 + r * 3.5
+    y = -math.sinh(d2r(point[1])) * r * 1.25 + r * 3
 
     #x = (d2r(point[0]) * 3 / (2 * math.pi)) * math.sqrt(abs((math.pi ** 2) / 3 - d2r(point[1]) ** 2))
     #y = d2r(point[1])
